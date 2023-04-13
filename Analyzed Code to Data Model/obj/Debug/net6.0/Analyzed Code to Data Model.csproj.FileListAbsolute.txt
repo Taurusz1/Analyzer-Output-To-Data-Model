@@ -1,0 +1,15 @@
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\bin\Debug\net6.0\Analyzed Code to Data Model.exe
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\bin\Debug\net6.0\Analyzed Code to Data Model.deps.json
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\bin\Debug\net6.0\Analyzed Code to Data Model.runtimeconfig.json
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\bin\Debug\net6.0\Analyzed Code to Data Model.dll
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\bin\Debug\net6.0\Analyzed Code to Data Model.pdb
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.csproj.AssemblyReference.cache
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.AssemblyInfoInputs.cache
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.AssemblyInfo.cs
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.csproj.CoreCompileInputs.cache
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.dll
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\refint\Analyzed Code to Data Model.dll
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.pdb
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\Analyzed Code to Data Model.genruntimeconfig.cache
+C:\Users\Bazsó\Desktop\6. félév\Szakmai gyak\Analyzed Code to Data Model\obj\Debug\net6.0\ref\Analyzed Code to Data Model.dll
