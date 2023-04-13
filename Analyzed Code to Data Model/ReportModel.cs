@@ -37,6 +37,7 @@ public class GeneralData
     public int PcAddress { get; set; }
 
     //TODO legyen-e int tömb
+    //asd
     public string EstimatedGasUsage { get; set; }
     public string Description { get; set; }
     public string File { get; set; }
