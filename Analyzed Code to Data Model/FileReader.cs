@@ -15,6 +15,7 @@ public class FileReader
 
     //count empty lines cuz not always 26
     int lineCnt = 0;
+    int tranCnt = 0;
     public FileReader(string path){
         fileLines = System.IO.File.ReadAllLines(path);
         report = new Report();
@@ -36,7 +37,6 @@ public class FileReader
                 loadTransaction(line);
             }
             lineCnt++;
-            //loadTransaction(vuln, line);
             //report.Vulns.Add(vuln);
         }
         //Console.WriteLine(vuln.ToString());
@@ -96,6 +96,7 @@ public class FileReader
         string storage = "";
         if (parts.Length > 2)
         {
+            //TODO Split parts[0] and assign name
             string[] balanceLine = parts[1].Split(":");
             string[] nonceLine = parts[2].Split(":");
             string[] storageLine = parts[3].Split(":");
@@ -130,18 +131,33 @@ public class FileReader
             string[] callerLine = parts[0].Split(":");
             string[] functionLine = parts[1].Split(":");
             string[] txDataLine = parts[2].Split(":");
-            string[] decodedDataLine = parts[3].Split(":"); //itt még elválasztva van egy rakat sor a value előtt
-            string[] valueLine = parts[parts.Length - 1].Split(":");
-            Console.WriteLine(callerLine[1]);
-            Console.WriteLine(functionLine[1]);
-            Console.WriteLine(txDataLine[1]);
-            Console.WriteLine(decodedDataLine[1]);
-            Console.WriteLine(valueLine[1]);
-        }
+            string[] decodedDataFirstElementParts = parts[3].Split(":"); //Has name of property and first property in this order
+            string decodedDataFirstElement = decodedDataFirstElementParts[1];
+            decodedDataFirstElement = decodedDataFirstElement.Trim();
+            decodedDataFirstElement = decodedDataFirstElement.Substring(1);//removes "(" at the begining 
+            decodedDataFirstElement = decodedDataFirstElement.Trim('\''); //removes ' from begining and end
 
-        foreach (string part in parts)
-        {
-            //Console.WriteLine(part);
+            //Regex rgx = new Regex("[^a-zA-Z0-9 -]");
+            //str = rgx.Replace(str, "");
+            List<String> DecodedData = new();
+            for(int i = 4; i < parts.Length-1; i++){
+                parts[i] = parts[i].Trim();
+                parts[i] = parts[i].Trim('\'');
+                Console.WriteLine(parts[i]);
+                DecodedData.Add(parts[i]);
+            }
+            //Console.WriteLine(decodedDataFirstElement);
+
+            string[] decodedData = {decodedDataFirstElement};
+            string[] valueLine = parts[parts.Length - 1].Split(":");
+
+            Transaction tran = new Transaction();
+            tran.Caller = callerLine[1].Trim();
+            tran.Function = functionLine[1].Trim();
+            tran.TxData = txDataLine[1].Trim();
+            tran.DecodedData = decodedData.ToArray();
+            tran.Value = valueLine[1].Trim();
+            vuln.Transactions.Add(tran);
         }
     }
 }
