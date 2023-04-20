@@ -13,7 +13,18 @@ public class Report
     {
         Vulns = new();
     }
+    public override string ToString()
+    {
+        string report = "";
+        foreach(Vuln vuln in Vulns)
+        {
+            Console.WriteLine(vuln);
+            //report += vuln;
+        }
+        return report;
+    }
 }
+
 public class Vuln
 {
     public GeneralData GeneralData { get; set; }
@@ -35,7 +46,7 @@ public class Vuln
         {
             trans += tran.ToString() + "\n";
         }
-        return GeneralData.ToString() + InitialState.ToString() + $"---Transaction---\n" + trans;
+        return GeneralData.ToString() + InitialState.ToString() + $"---Transaction---\n" + trans + "\n";
     }
 }
 
@@ -107,20 +118,14 @@ public class Transaction
     public string? Caller { get; set; }
     public string? Function { get; set; }
     public string? TxData { get; set; }
-    //TODO: make toString for this
-    public string[]? DecodedData { get; set; }
+    public string? DecodedData { get; set; }
     public string? Value { get; set; }
     public override String ToString()
     {
-        string decoded = "";
-        foreach (string data in DecodedData!)
-        {
-            decoded += data.ToString() + "\n";
-        }
         return $"Caller: {Caller}\n" +
                $"Function: {Function}\n" +
                $"txData: {TxData}\n" +
-               $"DecodedData: {decoded}" +
+               $"DecodedData: {DecodedData}\n" +
                $"Value: {Value}\n";
     }
 }

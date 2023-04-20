@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Reflection.Metadata;
@@ -13,15 +14,17 @@ public class FileReader
     Report report;
     Vuln vuln;
 
-    //count empty lines cuz not always 26
     int lineCnt = 0;
     int tranCnt = 0;
+    bool endOfVuln = false;
+
     public FileReader(string path){
         fileLines = System.IO.File.ReadAllLines(path);
-        report = new Report();
-        vuln = new Vuln();
+        report = new();
+        vuln = new();    
     }
-    public Report readAndParse()
+
+    public void readAndParse()
     {
         foreach (string line in fileLines){
             if (lineCnt <= 12)
@@ -32,15 +35,23 @@ public class FileReader
             {
                 loadInitialState(line);
             }
-            if (lineCnt >= 23) //until üres sor
+            if (lineCnt >= 23 && !endOfVuln)
             {
                 loadTransaction(line);
             }
             lineCnt++;
-            //report.Vulns.Add(vuln);
+            if (endOfVuln)
+            {
+                lineCnt = 0;
+                endOfVuln = false;
+                report.Vulns.Add(vuln);
+                vuln = new Vuln();
+            }
         }
-        //Console.WriteLine(vuln.ToString());
-        return report;
+        //Adds Last Vuln
+        report.Vulns.Add(vuln);
+        //Console.WriteLine(report.Vulns.Count);
+        Console.WriteLine(report);
     }
     public void loadGeneralData(string line)
     {
@@ -125,38 +136,46 @@ public class FileReader
         }
     }
     public void loadTransaction(string line){
-        string[] parts = line.Split(",");
+        if(line.Equals(string.Empty))
+        {
+            endOfVuln = true;
+        }
+        string[] parts = line.Split(":");
+
         if(parts.Length > 4)
         {
-            string[] callerLine = parts[0].Split(":");
-            string[] functionLine = parts[1].Split(":");
-            string[] txDataLine = parts[2].Split(":");
-            string[] decodedDataFirstElementParts = parts[3].Split(":"); //Has name of property and first property in this order
-            string decodedDataFirstElement = decodedDataFirstElementParts[1];
-            decodedDataFirstElement = decodedDataFirstElement.Trim();
-            decodedDataFirstElement = decodedDataFirstElement.Substring(1);//removes "(" at the begining 
-            decodedDataFirstElement = decodedDataFirstElement.Trim('\''); //removes ' from begining and end
+            string[] callerLine = parts[1].Split(",");
+            string[] functionLine = parts[2].Split(",");
+            string[] txDataLine = parts[3].Split(",");
+            string[] decodedDataLine = parts[4].Split(",");
+            string caller = callerLine[0].Trim().Trim('[').Trim(']');
+            string function = "";
+            string txData = "";
+            string decodedData = "";
+            string value = parts[parts.Length-1].Trim();
 
-            //Regex rgx = new Regex("[^a-zA-Z0-9 -]");
-            //str = rgx.Replace(str, "");
-            List<String> DecodedData = new();
-            for(int i = 4; i < parts.Length-1; i++){
-                parts[i] = parts[i].Trim();
-                parts[i] = parts[i].Trim('\'');
-                Console.WriteLine(parts[i]);
-                DecodedData.Add(parts[i]);
+            for(int i = 0; i < functionLine.Length-1; i++)
+            {
+                function += functionLine[i] +", ";
             }
-            //Console.WriteLine(decodedDataFirstElement);
-
-            string[] decodedData = {decodedDataFirstElement};
-            string[] valueLine = parts[parts.Length - 1].Split(":");
-
+            for(int i = 0; i < txDataLine.Length-1; i++)
+            {
+               txData += txDataLine[i] +", ";
+            }
+            for(int i = 0; i < decodedDataLine.Length-1; i++)//put these into string[]
+            {
+                if(decodedDataLine[i] != ")")
+                {
+                    decodedData += decodedDataLine[i].Trim().Trim('(').Trim(')').Trim('\'') +", ";
+                }
+            }
+            
             Transaction tran = new Transaction();
-            tran.Caller = callerLine[1].Trim();
-            tran.Function = functionLine[1].Trim();
-            tran.TxData = txDataLine[1].Trim();
-            tran.DecodedData = decodedData.ToArray();
-            tran.Value = valueLine[1].Trim();
+            tran.Caller = caller;
+            tran.Function = function.Trim().Trim(',');
+            tran.TxData = txData.Trim().Trim(',');
+            tran.DecodedData = decodedData.Trim().Trim(',');
+            tran.Value = value;
             vuln.Transactions.Add(tran);
         }
     }
@@ -180,50 +199,4 @@ public class FileReader
  * 20 Transaction sequence cím
  * 21 Üres
  * 22-until ures sor Fv Hívások megadása
- * 
- * 
- * switch (lineCnt){
-                case 0:
-                    vuln.GeneralData.FaultName = line;
-                    break;
-                case >=1 and <= 14:
-                    string[] parts = line.Split(":");
-                    string key = parts[0].Trim();
-                    string value = parts[1].Trim();
-
-                    switch (key)
-                    {
-                        case "SWC ID":
-                            vuln.GeneralData.SwcId = int.Parse(value);
-                            break;
-                        case "Severity":
-                            vuln.GeneralData.Severity = value;
-                            break;
-                        case "Contract":
-                            vuln.GeneralData.Contract = value;
-                            break;
-                        case "Function name":
-                            vuln.GeneralData.FunctionName = value;
-                            break;
-                        case "PC address":
-                            vuln.GeneralData.PcAddress = int.Parse(value);
-                            break;
-                        case "Estimated Gas Usage":
-                            vuln.GeneralData.EstimatedGasUsage = value;
-                            break;
-                        case "Description":
-                            vuln.GeneralData.Description = value;
-                            break;
-                        case "In file":
-                            vuln.GeneralData.File = value;
-                            break;
-                        case "":
-                            break;
-                        default:
-                            break;
-                    }
-                    break;
-                default:
-                    break;
-            }
  */
